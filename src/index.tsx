@@ -29,4 +29,4 @@ export class App extends Component<AppProps, AppState> {
   }
 }
 
-render(<App name="Jeff"/>, document.getElementById("app"));
+render(<App name="Rob"/>, document.getElementById("app"));

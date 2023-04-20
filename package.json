@@ -4,5 +4,9 @@
   "dependencies": {
     "preact": "^10.13.2",
     "typescript": "^5.0.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "deploy": "npm run build && tools/deploy.sh"
   }
 }
