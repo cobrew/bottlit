@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "h",
+    "lib": [
+      "es2022",
+      "dom"
+    ],
+    "module": "es2022",
+    "moduleResolution": "nodenext",
+    "outDir": "dist",
+    "rootDirs": [
+      "src"
+    ],
+    "target": "es2022"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*",
+  ]
+}
