@@ -39,7 +39,12 @@ export class Bottlit extends Component<BottlitProps, BottlitState> {
   changeInBottles(bottleInfo: BottleInfo, numBottles: number) {
     // It's not great that I'm using an object as a key here...
     this.volumesUsedMap.set(bottleInfo, numBottles);
+    const beerRemainingVolume = this.getRemainingVolume(this.state.beerTotalVolume);
+    this.setState({ beerRemainingVolume });
+  }
 
+  invalidBottle(bottleInfo: BottleInfo) {
+    this.volumesUsedMap.set(bottleInfo, NaN);
     const beerRemainingVolume = this.getRemainingVolume(this.state.beerTotalVolume);
     this.setState({ beerRemainingVolume });
   }
@@ -51,6 +56,9 @@ export class Bottlit extends Component<BottlitProps, BottlitState> {
   private getRemainingVolume(totalVol: number): number {
     let volumeRemaining = totalVol;
     for (const [bottleInfo, numBottles] of this.volumesUsedMap) {
+      if (Number.isNaN(numBottles) || numBottles < 0) {
+        continue;
+      }
       volumeRemaining -= (bottleInfo.bottleVolume * numBottles);
     }
     return volumeRemaining;
@@ -72,7 +80,8 @@ export class Bottlit extends Component<BottlitProps, BottlitState> {
           {Array.from(this.volumesUsedMap.keys())
               .map(info =>
                   <BottleInput id={'bottle-' + info.bottleType} info={info}
-                      reportVolumeUsedFn={(i, n) => this.changeInBottles(i, n)} />)}
+                      reportVolumeUsedFn={(i, n) => this.changeInBottles(i, n)}
+                      reportInvalidInputFn={(i) => this.invalidBottle(i)}/>)}
         </div>
 
         <hr />

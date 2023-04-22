@@ -1,0 +1,9 @@
+
+div.invalid {
+  color: red;
+  font-weight: bold;
+}
+
+div.invalid input {
+  color: red;
+}
