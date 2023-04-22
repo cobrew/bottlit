@@ -9,37 +9,55 @@ interface BottleInputProps {
 }
 
 interface BottleInputState {
-  invalid: boolean;
+  validState: BottleInputValidState;
+}
+
+enum BottleInputValidState {
+  VALID,
+  INVALID_FLOAT,
 }
 
 export class BottleInput extends Component<BottleInputProps, BottleInputState> {
   constructor() {
     super();
-    this.state = { invalid: false };
+    this.state = { validState: BottleInputValidState.VALID };
   }
 
   onInputChange(evt: Event, props: BottleInputProps) {
     evt.preventDefault();
     const inputEl = evt.currentTarget as HTMLInputElement;
-    const bottleInt = parseInt(inputEl.value) || 0;
-    const bottleFloat = parseFloat(inputEl.value) || 0;
-  
-    if (bottleInt < 0 || bottleInt !== bottleFloat) {
-      props.reportInvalidInputFn(props.info);
-      this.setState({ invalid: true });
-    } else {
-      props.reportVolumeUsedFn(props.info, bottleInt);
-      this.setState({ invalid: false });
+    let bottleNum = inputEl.valueAsNumber;
+    const bottleFloat = Math.ceil(parseFloat(inputEl.value) || 0);
+    // For the case where the text of the number input cannot be interpreted as
+    // a number, overwrite the value to '0' and select the text in the input
+    // so that it can be immediately re-typed.
+    if (Number.isNaN(bottleNum)) {
+      bottleNum = 0;
+      inputEl.value = '0';
+      inputEl.select();
     }
-  }
+  
+    let newValidState: BottleInputValidState = BottleInputValidState.VALID;
+    if (bottleNum !== bottleFloat) {
+      inputEl.select();
+      newValidState = BottleInputValidState.INVALID_FLOAT;
+      props.reportInvalidInputFn(props.info);
+    } else {
+      props.reportVolumeUsedFn(props.info, bottleNum);
+    }
+
+    this.setState({ validState: newValidState });
+}
 
   render(props: BottleInputProps) {
     return (
-      <div className={this.state.invalid ? "invalid" : ""}>
+      <div className={this.state.validState !== BottleInputValidState.VALID ? "invalid" : ""}>
         <label for={props.id}>{props.info.name} ({props.info.bottleVolume} oz):</label>
-        <input id={props.id} type="number"
+        <input id={props.id} type="number" min="0"
                onInput={(evt) => this.onInputChange(evt, props)}></input>
-        {this.state.invalid && <span>← Must be a positive integer or zero!</span>}
+        {this.state.validState === BottleInputValidState.INVALID_FLOAT ?
+            (<span>← Must be a whole number!</span>) : ''
+        }
       </div>
     );
   }
