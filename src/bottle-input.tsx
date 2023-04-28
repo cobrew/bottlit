@@ -17,6 +17,11 @@ enum BottleInputValidState {
   INVALID_FLOAT,
 }
 
+/**
+ * A number input component that accepts a positive integer representing the
+ * number of bottles, displaying an error message if the input value cannot be
+ * interpreted as a positive number.
+ */
 export class BottleInput extends Component<BottleInputProps, BottleInputState> {
   constructor() {
     super();
@@ -47,18 +52,21 @@ export class BottleInput extends Component<BottleInputProps, BottleInputState> {
     }
 
     this.setState({ validState: newValidState });
-}
+  }
 
   render(props: BottleInputProps) {
     return (
-      <div className={this.state.validState !== BottleInputValidState.VALID ? "invalid" : ""}>
-        <label for={props.id}>{props.info.name} ({props.info.bottleVolume} oz):</label>
-        <input id={props.id} type="number" min="0"
-               onInput={(evt) => this.onInputChange(evt, props)}></input>
-        {this.state.validState === BottleInputValidState.INVALID_FLOAT ?
-            (<span>← Must be a whole number!</span>) : ''
-        }
-      </div>
+      <tr className={this.state.validState !== BottleInputValidState.VALID ? "invalid" : ""}>
+        <td>
+          <label for={props.id}>{props.info.name} ({props.info.bottleVolume} oz):</label>
+        </td>
+        <td>
+          <input class="bottle-input" id={props.id} type="number" min="0"
+                 onInput={(evt) => this.onInputChange(evt, props)}></input>
+          {this.state.validState === BottleInputValidState.INVALID_FLOAT ?
+              (<span>← Must be a whole number!</span>) : ''}
+        </td>
+      </tr>
     );
   }
 }

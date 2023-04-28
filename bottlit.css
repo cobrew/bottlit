@@ -1,9 +1,39 @@
 
-div.invalid {
+tr.invalid {
   color: red;
   font-weight: bold;
 }
 
-div.invalid input {
+tr.invalid input {
   color: red;
+}
+
+section {
+  margin-bottom: 3em;
+}
+
+label, input, span {
+  font-size: 2em;
+}
+
+input {
+  border: solid 5px black;
+  margin-left: 2em;
+  width: 6em;
+}
+
+span#remaining-volume {
+  font-size: 4em;
+  font-weight: bold;
+  margin-left: 1em;
+}
+
+@media screen and (max-width: 1000px) {
+  label, input, span {
+    font-size: 3em;
+  }
+  
+  span#remaining-volume {
+    font-size: 5em;
+  }
 }

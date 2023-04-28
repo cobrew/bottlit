@@ -9,6 +9,9 @@ interface BottlitState {
   beerRemainingVolume: number;
 }
 
+/**
+ * The main app class for BottLit, the beer bottling calculator.
+ */
 export class Bottlit extends Component<BottlitProps, BottlitState> {
   state: BottlitState = { beerTotalVolume: 0, beerRemainingVolume: 0 };
   volumesUsedMap: Map<BottleInfo, number> = new Map();
@@ -67,29 +70,31 @@ export class Bottlit extends Component<BottlitProps, BottlitState> {
   render() {
     return (
       <div>
-        <div>
+        <section>
           <label for="total-volume">Total Beer Volume:</label>
           <input type="number" id="total-volume" autofocus
                  onInput={(evt) => this.changeBeerVolume(evt)}></input>
           <span>(oz)</span>
-        </div>
+        </section>
 
         <hr />
 
-        <div>
-          {Array.from(this.volumesUsedMap.keys())
-              .map(info =>
-                  <BottleInput id={'bottle-' + info.bottleType} info={info}
-                      reportVolumeUsedFn={(i, n) => this.changeInBottles(i, n)}
-                      reportInvalidInputFn={(i) => this.invalidBottle(i)}/>)}
-        </div>
+        <section>
+          <table>
+            {Array.from(this.volumesUsedMap.keys())
+                .map(info =>
+                    <BottleInput id={'bottle-' + info.bottleType} info={info}
+                        reportVolumeUsedFn={(i, n) => this.changeInBottles(i, n)}
+                        reportInvalidInputFn={(i) => this.invalidBottle(i)}/>)}
+          </table>
+        </section>
 
         <hr />
 
-        <div>
+        <section>
           <label for="remaining-volume">Remaining Beer to Bottle:</label>
           <span id="remaining-volume">{this.state.beerRemainingVolume} (oz)</span>
-        </div>
+        </section>
       </div>
     );
   }
