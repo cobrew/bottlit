@@ -1,41 +1,36 @@
 import { Component, h, render } from 'preact';
 import { BottleInput } from './bottle-input.js';
 import { BottleInfo, BritishBottleInfo, BomberBottleInfo, IndustryStandardBottleInfo } from './bottle-types.js';
+import { LiquidVolumeInput } from './components/liquid-volume-input.js';
+import { LiquidVolume, OZ } from './units/liquid-volume.js';
 
 interface BottlitProps {}
 
 interface BottlitState {
-  beerTotalVolume: number; // Ounces for now
-  beerRemainingVolume: number;
+  beerTotalVolume: LiquidVolume; // Ounces for now
+  beerRemainingVolume: LiquidVolume;
 }
 
 /**
  * The main app class for BottLit, the beer bottling calculator.
  */
 export class Bottlit extends Component<BottlitProps, BottlitState> {
-  state: BottlitState = { beerTotalVolume: 0, beerRemainingVolume: 0 };
+  state: BottlitState = {
+    beerTotalVolume: new LiquidVolume(0),
+    beerRemainingVolume: new LiquidVolume(0),
+  };
   volumesUsedMap: Map<BottleInfo, number> = new Map();
 
   constructor() {
     super();
-
-    this.state = {
-      beerTotalVolume: 0,
-      beerRemainingVolume: 0,
-    };
 
     [IndustryStandardBottleInfo, BritishBottleInfo, BomberBottleInfo].forEach(info => {
       this.volumesUsedMap.set(info, 0);
     });
   }
 
-  changeBeerVolume(evt: Event) {
-    evt.preventDefault();
-    const totalVolumeEl = evt.currentTarget as HTMLInputElement;
-
-    const beerTotalVolume = parseInt(totalVolumeEl.value);
+  changeBeerVolume(beerTotalVolume: LiquidVolume) {
     const beerRemainingVolume = this.getRemainingVolume(beerTotalVolume);
-
     this.setState({ beerTotalVolume, beerRemainingVolume });
   }
 
@@ -56,25 +51,23 @@ export class Bottlit extends Component<BottlitProps, BottlitState> {
    * Returns the amount not bottled, given a total volume and the bottles being used.
    * Makes no state updates.
    */
-  private getRemainingVolume(totalVol: number): number {
-    let volumeRemaining = totalVol;
+  private getRemainingVolume(totalVol: LiquidVolume): LiquidVolume {
+    let volumeRemaining = totalVol.get(OZ);
     for (const [bottleInfo, numBottles] of this.volumesUsedMap) {
       if (Number.isNaN(numBottles) || numBottles < 0) {
         continue;
       }
       volumeRemaining -= (bottleInfo.bottleVolume * numBottles);
     }
-    return volumeRemaining;
+    return new LiquidVolume(volumeRemaining, OZ);
   }
 
   render() {
     return (
       <div>
         <section>
-          <label for="total-volume">Total Beer Volume:</label>
-          <input type="number" id="total-volume" autofocus
-                 onInput={(evt) => this.changeBeerVolume(evt)}></input>
-          <span>(oz)</span>
+          <LiquidVolumeInput editable={true} labelString='Total Beer Volume'
+              updateQuantityFn={(q) => this.changeBeerVolume(q)} />
         </section>
 
         <hr />
@@ -92,8 +85,9 @@ export class Bottlit extends Component<BottlitProps, BottlitState> {
         <hr />
 
         <section>
-          <label for="remaining-volume">Remaining Beer to Bottle:</label>
-          <span id="remaining-volume">{this.state.beerRemainingVolume} (oz)</span>
+          <LiquidVolumeInput editable={false}
+                             volume={this.state.beerRemainingVolume}
+                             labelString='Remaining Beer to Bottle'/>
         </section>
       </div>
     );
