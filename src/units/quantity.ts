@@ -25,7 +25,7 @@ export class Quantity {
       throw `Cannot convert to unit ${unitType.description}`;
     }
 
-    return this.value * this.otherUnits[unitDescIndex].factor;
+    return Number((this.value * this.otherUnits[unitDescIndex].factor).toFixed(2));
   }
 
   set(newValue: number, unitType: UnitDescriptor = this.baseUnit) {
