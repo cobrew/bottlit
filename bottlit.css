@@ -29,6 +29,10 @@ input:focus {
   border-radius: 0.25em;
 }
 
+input.err {
+  background-color: #f99;
+}
+
 span#remaining-volume {
   font-size: 4em;
   font-weight: bold;
