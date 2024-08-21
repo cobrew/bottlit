@@ -2,7 +2,7 @@ import { Component, h, render } from 'preact';
 import { BottleInput } from './bottle-input.js';
 import { BottleInfo, BritishBottleInfo, BomberBottleInfo, IndustryStandardBottleInfo } from './bottle-types.js';
 import { LiquidVolumeInput } from './components/liquid-volume-input.js';
-import { LiquidVolume, OZ } from './units/liquid-volume.js';
+import { GAL, LiquidVolume, LITRE, OZ } from './units/liquid-volume.js';
 
 interface BottlitProps {}
 
@@ -67,6 +67,7 @@ export class Bottlit extends Component<BottlitProps, BottlitState> {
       <div>
         <section>
           <LiquidVolumeInput editable={true} labelString='Total Beer Volume'
+              units={[GAL, LITRE, OZ]}
               updateQuantityFn={(q) => this.changeBeerVolume(q)} />
         </section>
 
@@ -86,6 +87,7 @@ export class Bottlit extends Component<BottlitProps, BottlitState> {
 
         <section>
           <LiquidVolumeInput editable={false}
+                             units={[GAL, LITRE, OZ]}
                              volume={this.state.beerRemainingVolume}
                              labelString='Remaining Beer to Bottle'/>
         </section>

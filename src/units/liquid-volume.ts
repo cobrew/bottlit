@@ -5,10 +5,10 @@
 
 import { Quantity, UnitDescriptor } from './quantity.js';
 
-export const ML: UnitDescriptor = { factor: 1, description: 'ML'};
-export const LITRE: UnitDescriptor = { factor: 0.001, description: 'L' };
-export const OZ: UnitDescriptor = { factor: 0.033814, description: 'OZ' };
-export const GAL: UnitDescriptor = { factor: 0.000264172, description: 'GAL' };
+export const ML: UnitDescriptor = { factor: 1, description: 'ML', unitString: 'milliliter'};
+export const LITRE: UnitDescriptor = { factor: 0.001, description: 'L', unitString: 'liter' };
+export const OZ: UnitDescriptor = { factor: 0.033814, description: 'OZ', unitString: 'ounce' };
+export const GAL: UnitDescriptor = { factor: 0.000264172, description: 'GAL', unitString: 'gallon' };
 
 export class LiquidVolume extends Quantity {
   constructor(value: number, startingUnit?: UnitDescriptor) {

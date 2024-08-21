@@ -1,8 +1,14 @@
 
+/**
+ * Describes a unit in terms of its unit symbol and the conversion factor to the base unit of
+ * that quantity.
+ */
 export interface UnitDescriptor {
   description?: string;
-  /** Multiply the base value by this to get to the base unit. */
+  /** Multiply the value of this unit by the following factor to get to the base unit. */
   factor: number;
+  /** A string representing the units (like "liter"). */
+  unitString: string;
 }
 
 /**
@@ -18,6 +24,7 @@ export class Quantity {
     this.set(val, startingUnit);
   }
 
+  /** Retrieves the value of this quantity in the specified unit. */
   get(unitType: UnitDescriptor = this.baseUnit): number {
     if (unitType === this.baseUnit) return this.value;
     let unitDescIndex = this.otherUnits.indexOf(unitType);
@@ -28,6 +35,7 @@ export class Quantity {
     return Number((this.value * this.otherUnits[unitDescIndex].factor).toFixed(2));
   }
 
+  /** Sets the value of this quantity in the specified unit. */
   set(newValue: number, unitType: UnitDescriptor = this.baseUnit) {
     if (unitType === this.baseUnit) {
       this.value = newValue;
